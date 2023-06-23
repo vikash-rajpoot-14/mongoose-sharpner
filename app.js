@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const errorController = require('./controllers/error');
+const User = require('./models/user');
 
 dotenv.config({path : './config.env'})
 
@@ -24,14 +25,15 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//   User.findById(1)
-//     .then(user => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById("64956291bd7610cca87596d9")
+    .then(user => {
+      // console.log(user);
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -42,4 +44,5 @@ const PORT = process.env.PORT
 
 app.listen(PORT,()=>{
   console.log(`listening on http://localhost:${PORT} `);
+  // User.create({name:"vikash" , email:"vikash@gmail.com"})
 })
