@@ -13,7 +13,7 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({title, imageUrl, price, description})
+  Product.create({title, imageUrl, price, description , userId : req.user})
     .then(result => {
       // console.log(result);
       console.log('Created Product');
@@ -66,14 +66,19 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .then(products => {
-      res.render('admin/products', {
-        prods: products,
-        pageTitle: 'Admin Products',
-        path: '/admin/products'
-      });
-    })
-    .catch(err => console.log(err));
+  .populate('userId')
+  .then(products => {
+    // console.log("object", products);
+    res.render('admin/products', {
+      prods: products,
+      pageTitle: 'Admin Products',
+      path: '/admin/products'
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    // Handle the error appropriately
+  });
 };
 
 exports.postDeleteProduct = (req, res, next) => {

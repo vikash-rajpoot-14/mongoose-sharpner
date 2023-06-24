@@ -12,6 +12,10 @@ const ProductSchema = new mongoose.Schema({
   },
   description: {
     type:String
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
